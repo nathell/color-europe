@@ -1,5 +1,3 @@
 (defproject color-europe "1.0.0-SNAPSHOT"
-  :description "FIXME: write"
-  :dependencies [[org.clojure/clojure "1.2.0"]
-                 [org.clojure/clojure-contrib "1.2.0"]]
-  :dev-dependencies [[swank-clojure "1.2.0"]])
+  :description "Color your own Europe in Clojure!"
+  :dependencies [[org.clojure/clojure "1.5.1"]])

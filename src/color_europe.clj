@@ -1,8 +1,7 @@
 (ns color-europe
-  (:use [clojure.contrib.io :only [with-out-writer]])
   (:require [clojure.xml :as xml]
-            [clojure.contrib.math :as math]
-            [clojure.zip :as zip]))
+            [clojure.zip :as zip]
+            [clojure.java.io :as io]))
 
 ;; The recursive tree mapping function, needed to get the actual 
 ;; colorizer working.
@@ -40,8 +39,9 @@
 (defn save-color-map
   [svg colorize-fn outfile]
   (let [colored-map (map-zipper #(color-state % colorize-fn) (fn [x] (#{:g :path} (:tag x))) (zip/xml-zip svg))]
-    (with-out-writer outfile
-      (xml/emit colored-map))))
+    (with-open [w (io/writer outfile)]
+      (binding [*out* w]
+        (xml/emit colored-map)))))
 
 ;; Other sample colorizers -- have fun!
 
@@ -51,7 +51,7 @@
 (defn hsv->rgb [h s v]
   (let [c (* v s)
         h1 (* h 6)
-        x (* c (- 1 (math/abs (- (mod h1 2) 1))))
+        x (* c (- 1 (Math/abs (- (mod h1 2) 1))))
         [r g b] (cond
                      (in-range 0 h1 1) [c x 0]
                      (in-range 1 h1 2) [x c 0]
